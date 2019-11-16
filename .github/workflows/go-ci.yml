@@ -1,8 +1,15 @@
 name: Go CI Workflow
 on:
   push:
-    - master
+    branches:
+      - master
+    paths_ignore:
+      - '**.md'
+      - '.gitignore'
   pull_request:
+    paths_ignore:
+      - '**.md'
+      - '.gitignore'
 
 jobs:
 
