@@ -36,7 +36,6 @@ jobs:
           mkdir -p $GOBIN
           mkdir -p $GOPATH/src/github.com/$GITHUB_REPOSITORY
           cp -r $(pwd)/* $GOPATH/src/github.com/$GITHUB_REPOSITORY
-          ls $GOPATH/src/github.com/$GITHUB_REPOSITORY
 
       - name: Get dependencies
         run: |
@@ -44,6 +43,8 @@ jobs:
           if [ -f Gopkg.toml ]; then
             curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
             ls
+            echo $PATH
+            env
             dep ensure
           fi
 
