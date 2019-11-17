@@ -4,3 +4,4 @@
 [![Actions Status](https://github.com/dannysievers/go-github-actions/workflows/Release/badge.svg)](https://github.com/dannysievers/go-github-actions/actions)
 # go-ci-cd-example
 Example Go REST API with Github Actions CI/CD
+test
