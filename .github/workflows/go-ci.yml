@@ -27,9 +27,14 @@ jobs:
 
       - name: Get dependencies
         run: |
+          export GOPATH=$(go env GOPATH)
           export GOBIN=$(go env GOPATH)/bin
+          export PATH=$PATH:$GOPATH
           export PATH=$PATH:$GOBIN
-          mkdir -p $(go env GOPATH)/bin
+          mkdir -p $GOBIN
+          mkdir -p $GOPATH/src/github.com/$GITHUB_REPOSITORY
+          pwd
+          ls
           go get -v -t -d ./...
           if [ -f Gopkg.toml ]; then
             curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
