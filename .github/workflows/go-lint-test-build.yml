@@ -28,7 +28,6 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v1
         with:
-          fetch-depth: 1
           path: go/src/github.com/dannysievers/go-github-actions
 
       - name: Lint Go Code
@@ -52,7 +51,6 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v1
         with:
-          fetch-depth: 1
           path: go/src/github.com/dannysievers/go-github-actions
 
       - name: Get dependencies
