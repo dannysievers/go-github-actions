@@ -29,9 +29,7 @@ jobs:
         run: |
           export PATH=$PATH:$(go env GOPATH)/bin # temporary fix for https://github.com/actions/setup-go/issues/12
           go get -u golang.org/x/lint/golint
-          go list ./... | grep -v /vendor/
-          golint -set_exit_status ./...
-          # go list ./... | grep -v /vendor/ | xargs -L1 golint -set_exit_status
+          go list ./... | grep -v /vendor/ | xargs -L1 golint -set_exit_status
   test:
     name: Test
     runs-on: ubuntu-latest
