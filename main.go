@@ -8,7 +8,6 @@ import (
 	"strconv"
 )
 
-// Song represents a song title and artist paired with a unique ID
 type Song struct {
 	ID     string `json:"id"`
 	Title  string `json:"title"`
