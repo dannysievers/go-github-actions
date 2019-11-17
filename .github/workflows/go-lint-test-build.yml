@@ -30,10 +30,13 @@ jobs:
 
       - name: Lint Go Code
         run: |
-          echo $GITHUB_WORKSPACE
-          export PATH=$PATH:$(go env GOPATH)/bin # temporary fix for https://github.com/actions/setup-go/issues/12
+          export PATH=$PATH:$GOPATH/bin # temporary fix for https://github.com/actions/setup-go/issues/12
+          echo $GOPATH
           go get -u golang.org/x/lint/golint
           go list ./... | grep -v /vendor/ | xargs -L1 golint -set_exit_status
+        env:
+          GOPATH: /home/runner/work//home/runner/work/$(echo $GITHUB_REPOSITORY | awk -F'/' '{print $2}')/go/go
+          
 
   test:
     name: Test
@@ -51,30 +54,34 @@ jobs:
           path: go/src/github.com/$GITHUB_REPOSITORY
 
       # temporary fix for https://github.com/actions/setup-go/issues/12
-      - name: Set GOPATH + GOBIN
-        run: |
-          export GOPATH=$(go env GOPATH)
-          export GOBIN=$(go env GOPATH)/bin
-          mkdir -p $GOPATH/pkg
-          mkdir -p $GOBIN
-          mkdir -p $GOPATH/src/github.com/$GITHUB_REPOSITORY
-          cp -r $(pwd)/* $GOPATH/src/github.com/$GITHUB_REPOSITORY
+      # - name: Set GOPATH + GOBIN
+      #   run: |
+      #     export GOPATH=$(go env GOPATH)
+      #     export GOBIN=$(go env GOPATH)/bin
+      #     mkdir -p $GOPATH/pkg
+      #     mkdir -p $GOBIN
+      #     mkdir -p $GOPATH/src/github.com/$GITHUB_REPOSITORY
+      #     cp -r $(pwd)/* $GOPATH/src/github.com/$GITHUB_REPOSITORY
 
       - name: Get dependencies
         run: |
           go get -v -t -d ./...
           if [ -f Gopkg.toml ]; then
-            export GOPATH=$(go env GOPATH) # temporary fix for https://github.com/actions/setup-go/issues/12
-            export PATH=$PATH:$(go env GOPATH)/bin # temporary fix for https://github.com/actions/setup-go/issues/12
+            # export GOPATH=$(go env GOPATH) # temporary fix for https://github.com/actions/setup-go/issues/12
+            export PATH=$PATH:$GOPATH/bin # temporary fix for https://github.com/actions/setup-go/issues/12
             cd $GOPATH/src/github.com/$GITHUB_REPOSITORY # temporary fix for https://github.com/actions/setup-go/issues/12
             curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
             dep ensure
           fi
+        env:
+          GOPATH: /home/runner/work/woodpecker/go
 
       - name: Run Unit tests
         run: |
           go test ./... -coverprofile cover.out -covermode=atomic
           cat cover.out >> coverage.txt
+        env:
+          GOPATH: /home/runner/work/$(echo $GITHUB_REPOSITORY | awk -F'/' '{print $2}')/go
 
       - name: Upload Coverage report to CodeCov
         uses: codecov/codecov-action@v1.0.3
