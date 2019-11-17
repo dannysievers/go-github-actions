@@ -35,7 +35,7 @@ jobs:
           go get -u golang.org/x/lint/golint
           go list ./... | grep -v /vendor/ | xargs -L1 golint -set_exit_status
         env:
-          GOPATH: /home/runner/work//home/runner/work/$(echo $GITHUB_REPOSITORY | awk -F'/' '{print $2}')/go/go
+          GOPATH: /home/runner/work/go-github-actions/go
           
 
   test:
@@ -74,14 +74,14 @@ jobs:
             dep ensure
           fi
         env:
-          GOPATH: /home/runner/work/woodpecker/go
+          GOPATH: /home/runner/work/go-github-actions/go
 
       - name: Run Unit tests
         run: |
           go test ./... -coverprofile cover.out -covermode=atomic
           cat cover.out >> coverage.txt
         env:
-          GOPATH: /home/runner/work/$(echo $GITHUB_REPOSITORY | awk -F'/' '{print $2}')/go
+          GOPATH: /home/runner/work/go-github-actions/go
 
       - name: Upload Coverage report to CodeCov
         uses: codecov/codecov-action@v1.0.3
