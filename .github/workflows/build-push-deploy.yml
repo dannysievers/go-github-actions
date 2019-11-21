@@ -39,7 +39,8 @@ jobs:
         
       # Build the Docker image
       - name: Build
-        run: |        
+        run: |
+          cd $GOPATH/src/github.com/$GITHUB_REPOSITORY        
           docker build -t gcr.io/${{ secrets.GCP_PROJECT }}/"$IMAGE":"$GITHUB_SHA" \
             --build-arg GITHUB_SHA="$GITHUB_SHA" \
             --build-arg GITHUB_REF="$GITHUB_REF" .
