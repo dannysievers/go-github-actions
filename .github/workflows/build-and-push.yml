@@ -24,15 +24,25 @@ jobs:
           fetch-depth: 1
           path: go/src/github.com/dannysievers/go-github-actions
 
-      - name: Build Docker container
-        uses: elgohr/Publish-Docker-Github-Action@master
+      - name: GCP Authenticate  
+        uses: actions/gcloud/auth@master
+
+      - name: GCP List Clusters
+        uses: actions/gcloud/cli@master
         with:
-          name: dannysievers/go-api-example
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          workdir: /home/runner/work/go-github-actions/go/src/github.com/dannysievers/go-github-actions
-          dockerfile: Dockerfile
-          snapshot: true
+          args: container clusters list
+      
+      # Push to Dockerhub
+      # - name: Build and Publish to Registry
+      #   uses: elgohr/Publish-Docker-Github-Action@master
+      #   with:
+      #     name: dannysievers/go-api-example
+      #     username: ${{ secrets.DOCKER_USERNAME }}
+      #     password: ${{ secrets.DOCKER_PASSWORD }}
+      #     workdir: /home/runner/work/go-github-actions/go/src/github.com/dannysievers/go-github-actions
+      #     dockerfile: Dockerfile
+      #     snapshot: true
         env:
           GOPATH: /home/runner/work/go-github-actions/go
           GOBIN: /home/runner/work/go-github-actions/go/bin
+          GCLOUD_AUTH: ${{ secrets.GCP_AUTH }}
