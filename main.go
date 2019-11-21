@@ -73,9 +73,9 @@ func deleteSong(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(&songs)
 }
 
-// func testyMctesterson() string {
-// 	return "YOU DIDN'T TEST ME"
-// }
+func testyMctesterson() string {
+	return "YOU DIDN'T TEST ME"
+}
 
 func main() {
 	router := mux.NewRouter()
