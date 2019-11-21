@@ -21,7 +21,7 @@ jobs:
 
       - name: Move vendored dependencies
         run: |
-          mv $GOPATH/src/github.com/$GITHUB_REPOSITORY/vendor/* $GOPATH/src/github.com/$GITHUB_REPOSITORY
+          cp $GOPATH/src/github.com/$GITHUB_REPOSITORY/vendor/* $GOROOT/src/github.com/$GITHUB_REPOSITORY
 
       - name: Validates GO releaser config
         uses: docker://goreleaser/goreleaser:latest
