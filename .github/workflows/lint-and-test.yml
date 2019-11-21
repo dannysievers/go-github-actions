@@ -3,12 +3,6 @@
 
 name: Lint and Test
 on:
-  push:
-    branches:
-      - master
-    paths-ignore:
-      - '**.md'
-      - '.gitignore'
   pull_request:
     paths-ignore:
       - '**.md'
