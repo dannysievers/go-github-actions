@@ -1,7 +1,7 @@
 # checkout.with blocks, jobs.id.env blocks, and additional GOBIN/GOPATH related operations are temporary
 # see https://github.com/actions/setup-go/issues/12 for more information
 
-name: Lint, Test, and Build
+name: Lint and Test
 on:
   push:
     branches:

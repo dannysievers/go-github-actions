@@ -1,0 +1,38 @@
+name: Build and Push
+on:
+  push:
+    branches:
+      - master
+    paths_ignore:
+      - '**.md'
+      - '.gitignore'
+
+jobs:
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Go
+        uses: actions/setup-go@v1
+        with:
+          go-version: 1.13
+
+      - name: Check out code
+        uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+          path: go/src/github.com/dannysievers/go-github-actions
+
+      - name: Build Docker container
+        uses: elgohr/Publish-Docker-Github-Action@master
+        with:
+          name: dannysievers/go-api-example
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          workdir: /home/runner/work/go-github-actions/go/src/github.com/dannysievers/go-github-actions
+          dockerfile: Dockerfile
+          snapshot: true
+        env:
+          GOPATH: /home/runner/work/go-github-actions/go
+          GOBIN: /home/runner/work/go-github-actions/go/bin
