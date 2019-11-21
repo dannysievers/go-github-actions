@@ -19,16 +19,9 @@ jobs:
         with:
           path: go/src/github.com/dannysievers/go-github-actions
 
-      - name: Get dependencies
+      - name: Move vendored dependencies
         run: |
-          go get -v -t -d ./...
-          if [ -f Gopkg.toml ]; then
-            export PATH=$PATH:$GOPATH/bin
-            mkdir -p $GOBIN
-            cd $GOPATH/src/github.com/$GITHUB_REPOSITORY
-            curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
-            dep ensure
-          fi
+          mv $GOPATH/src/github.com/$GITHUB_REPOSITORY/vendor/* $GOPATH/src/github.com/$GITHUB_REPOSITORY
 
       - name: Validates GO releaser config
         uses: docker://goreleaser/goreleaser:latest
