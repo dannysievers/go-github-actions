@@ -39,10 +39,10 @@ func TestCreateSong(t *testing.T) {
 	}
 }
 
-// func TestTestyMctesterson(t *testing.T) {
-// 	expect := "YOU DIDN'T TEST ME"
-// 	actual := testyMctesterson()
-// 	if actual != expect {
-// 		t.Errorf("Got %v and expected %v", actual, expect)
-// 	}
-// }
+func TestTestyMctesterson(t *testing.T) {
+	expect := "YOU DIDN'T TEST ME"
+	actual := testyMctesterson()
+	if actual != expect {
+		t.Errorf("Got %v and expected %v", actual, expect)
+	}
+}
