@@ -8,6 +8,10 @@ on:
       - '**.md'
       - '.gitignore'
 
+env:
+  GOPATH: /home/runner/work/go-github-actions/go
+  GOBIN: /home/runner/work/go-github-actions/go/bin
+
 jobs:
 
   lint:
@@ -29,9 +33,6 @@ jobs:
           export PATH=$PATH:$GOPATH/bin
           go get -u golang.org/x/lint/golint
           go list ./... | grep -v /vendor/ | xargs -L1 golint -set_exit_status
-        env:
-          GOPATH: /home/runner/work/go-github-actions/go
-          GOBIN: /home/runner/work/go-github-actions/go/bin
 
   test:
     name: Test
@@ -57,17 +58,11 @@ jobs:
             curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
             dep ensure
           fi
-        env:
-          GOPATH: /home/runner/work/go-github-actions/go
-          GOBIN: /home/runner/work/go-github-actions/go/bin
 
       - name: Run Unit tests
         run: |
           go test $(go list ./... | grep -v /vendor/) -coverprofile cover.out -covermode=atomic
           cat cover.out >> coverage.txt
-        env:
-          GOPATH: /home/runner/work/go-github-actions/go
-          GOBIN: /home/runner/work/go-github-actions/go/bin
 
       - name: Upload Coverage report to CodeCov
         uses: codecov/codecov-action@v1.0.3

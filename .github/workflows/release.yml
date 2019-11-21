@@ -4,6 +4,11 @@ on:
     tags:
       - 'v*'
 
+env:
+  GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+  GOPATH: /home/runner/work/go-github-actions/go
+  GOBIN: /home/runner/work/go-github-actions/go/bin
+
 jobs:
   release:
     name: Release on GitHub
@@ -11,6 +16,8 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v1
+        with:
+          path: go/src/github.com/dannysievers/go-github-actions
 
       - name: Validates GO releaser config
         uses: docker://goreleaser/goreleaser:latest
@@ -21,5 +28,3 @@ jobs:
         uses: docker://goreleaser/goreleaser:latest
         with:
           args: release
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
