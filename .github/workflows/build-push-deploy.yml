@@ -1,4 +1,4 @@
-name: Build and Push
+name: Build, Push, and Deploy
 on:
   push:
     branches:
@@ -10,7 +10,7 @@ on:
 jobs:
 
   build:
-    name: Build
+    name: Build and Push
     runs-on: ubuntu-latest
     steps:
       - name: Set up Go
@@ -24,13 +24,29 @@ jobs:
           fetch-depth: 1
           path: go/src/github.com/dannysievers/go-github-actions
 
-      - name: GCP Authenticate  
-        uses: actions/gcloud/auth@master
-
-      - name: GCP List Clusters
-        uses: actions/gcloud/cli@master
+      # Setup gcloud CLI
+      - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
         with:
-          args: container clusters list
+          version: '270.0.0'
+          service_account_email: ${{ secrets.GCP_SA_EMAIL }}
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+
+      # Configure docker to use the gcloud command-line tool as a credential helper
+      - run: |
+          # Set up docker to authenticate
+          # via gcloud command-line tool.
+          gcloud auth configure-docker
+        
+      # Build the Docker image
+      - name: Build
+        run: |        
+          docker build -t gcr.io/${{ secrets.GCP_PROJECT }}/"$IMAGE":"$GITHUB_SHA" \
+            --build-arg GITHUB_SHA="$GITHUB_SHA" \
+            --build-arg GITHUB_REF="$GITHUB_REF" .
+      # Push the Docker image to Google Container Registry
+      - name: Publish
+        run: |
+          docker push gcr.io/${{ secrets.GCP_PROJECT }}/$IMAGE:$GITHUB_SHA
       
       # Push to Dockerhub
       # - name: Build and Publish to Registry
@@ -45,4 +61,4 @@ jobs:
         env:
           GOPATH: /home/runner/work/go-github-actions/go
           GOBIN: /home/runner/work/go-github-actions/go/bin
-          GCLOUD_AUTH: ${{ secrets.GCP_AUTH }}
+          IMAGE: go-api-gke
